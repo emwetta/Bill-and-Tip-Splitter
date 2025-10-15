@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Equal Pay</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <div class="header">
+      <img src="image.png" alt="Afrikiko Logo" class="logo">
+      <h1>AFRIKIKO EQUAL PAY</h1>
+    </div>
+
+    <div class="container">
+      <label for="bill">Total Bill ($):</label>
+      <input type="number" id="bill" placeholder="Enter total bill">
+
+      <label for="people">Number of People:</label>
+      <input type="number" id="people" placeholder="Enter number of people" oninput="createNameInputs()">
+
+      <div id="names-container"></div>
+
+      <div id="tip-section" style="display: none;">
+        <label class="tip-label">
+          <input type="checkbox" id="includeTip" onchange="toggleTipOptions()"> Include Tip?
+        </label>
+
+        <div id="tip-options" style="display: none;">
+          <label>Tip Amount ($):</label>
+          <input type="number" id="tipAmount" placeholder="Enter tip amount">
+
+          <label>Who is paying the tip?</label>
+          <div id="whoPaysTip" class="tip-payers-container"></div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button onclick="splitBill()">Split Bill</button>
+        <button onclick="clearFields()" class="clear-btn">Clear</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+
+    <footer>
+      Thank you for using Equal Pay<br>
+      <span class="author">Developed by MR. WETTA</span>
+    </footer>
+  </div>
+
+  <script src="Myfirst.js"></script>
+</body>
+
+</html>
