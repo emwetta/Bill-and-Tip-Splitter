@@ -16,9 +16,13 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #1a1a1a;
 
-  /* --- REPLACE THIS LINE BELOW --- */
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat fixed;
-  /* ------------------------------- */
+  /* --- STEP 1: REMOVE THE BACKGROUND IMAGE LINE FROM HERE --- */
+  /* background: ... (delete this line) ... */
+
+  /* --- STEP 2: ADD THESE TWO LINES --- */
+  position: relative;
+  z-index: 1;
+  /* ----------------------------------- */
 
   display: flex;
   flex-direction: column;
@@ -26,6 +30,23 @@ body {
   justify-content: center;
   padding: 20px;
   color: white;
+}
+
+/* --- STEP 3: ADD THIS NEW SECTION RIGHT BELOW BODY --- */
+body::before {
+  content: "";
+  position: fixed;
+  /* This is the magic word that works on iPhone */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Put your image here. Note: I removed the word 'fixed' from the end */
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
+
+  z-index: -1;
+  /* This pushes the image behind your buttons */
 }
 
 @media (max-height: 750px) {
