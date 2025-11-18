@@ -4,7 +4,11 @@ function createNameInputs() {
   const tipSection = document.getElementById("tip-section");
 
   container.innerHTML = "";
-  document.getElementById("result-card").style.display = "none";
+
+  // We no longer need to hide result-card because we are using a popup
+  // but we keep this check to prevent errors if the element is missing
+  const resultCard = document.getElementById("result-card");
+  if (resultCard) resultCard.style.display = "none";
 
   if (people > 50) return Swal.fire("Warning", "Maximum 50 people allowed", "warning");
 
@@ -89,9 +93,9 @@ function splitBill() {
   const eachBill = bill / people;
   const tipShare = tipPayers.length > 0 ? tip / tipPayers.length : 0;
 
-  const resultList = document.getElementById("result-list");
-  resultList.innerHTML = "";
-  let shareText = `*Afrikiko Bill Split* 🧾%0A`;
+  // --- NEW LOGIC: BUILD HTML STRING FOR POPUP ---
+  let resultHTML = '<div style="text-align: left; font-size: 0.95rem;">';
+  let shareText = `*Afrikiko Bill Split* 🧾%0A`; // %0A is newline for WhatsApp
 
   for (let i = 1; i <= people; i++) {
     const nameInput = document.getElementById("person" + i);
@@ -99,24 +103,42 @@ function splitBill() {
 
     const totalPay = tipPayers.includes(name) ? eachBill + tipShare : eachBill;
 
-    const div = document.createElement("div");
-    div.className = "result-item";
-    div.innerHTML = `<span>${name}</span> <strong>GH₵ ${totalPay.toFixed(2)}</strong>`;
-    resultList.appendChild(div);
+    // Add row to the Popup HTML
+    resultHTML += `
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.2);">
+        <span style="color:#ccc;">${name}</span>
+        <strong style="color:#f9c400;">GH₵ ${totalPay.toFixed(2)}</strong>
+      </div>`;
 
+    // Add line to the WhatsApp Message
     shareText += `${name}: GH₵ ${totalPay.toFixed(2)}%0A`;
   }
+  resultHTML += '</div>';
 
-  document.getElementById("result-card").dataset.shareText = shareText;
-  document.getElementById("result-card").style.display = "block";
-
-  setTimeout(() => {
-    document.getElementById("result-card").scrollIntoView({ behavior: "smooth", block: "center" });
-  }, 100);
+  // --- FIRE THE CUSTOM POPUP ---
+  Swal.fire({
+    title: 'Bill Breakdown',
+    html: resultHTML,
+    background: '#1a1a1a',
+    color: '#fff',
+    showDenyButton: true, // This acts as our WhatsApp button
+    confirmButtonText: 'Close',
+    denyButtonText: 'Share on WhatsApp',
+    denyButtonColor: '#25D366', // WhatsApp Green
+    confirmButtonColor: '#444', // Dark Grey for Close
+    customClass: {
+      popup: 'animate__animated animate__fadeInUp' // Slide up animation
+    }
+  }).then((result) => {
+    if (result.isDenied) {
+      // If they clicked the Green "Share" button
+      shareToWhatsApp(shareText);
+    }
+  });
 }
 
-function shareToWhatsApp() {
-  const text = document.getElementById("result-card").dataset.shareText;
+// Updated to accept text directly from the function above
+function shareToWhatsApp(text) {
   if (text) window.open(`https://wa.me/?text=${text}`, '_blank');
 }
 
@@ -125,6 +147,9 @@ function clearFields() {
   document.getElementById("people").value = "";
   document.getElementById("names-container").innerHTML = "";
   document.getElementById("tip-section").style.display = "none";
-  document.getElementById("result-card").style.display = "none";
   document.getElementById("includeTip").checked = false;
+
+  // Clear result card if it still exists in HTML
+  const resultCard = document.getElementById("result-card");
+  if (resultCard) resultCard.style.display = "none";
 }
