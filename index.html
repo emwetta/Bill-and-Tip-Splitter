@@ -4,48 +4,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Equal Pay</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Afrikiko Equal Pay</title>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
   <div class="main-wrapper">
     <div class="header">
-      <img src="image.png" alt="Afrikiko Logo" class="logo">
+      <img src="images/image.png" alt="Afrikiko Logo" class="logo">
       <h1>AFRIKIKO EQUAL PAY</h1>
     </div>
 
     <div class="container">
-      <label for="bill">Total Bill ($):</label>
-      <input type="number" id="bill" placeholder="Enter total bill">
+      <div class="input-group">
+        <label>Total Bill (GH₵)</label>
+        <input type="number" id="bill" placeholder="0.00">
+      </div>
 
-      <label for="people">Number of People:</label>
-      <input type="number" id="people" placeholder="Enter number of people" oninput="createNameInputs()">
+      <div class="input-group">
+        <label>Number of People</label>
+        <input type="number" id="people" placeholder="How many people?" oninput="createNameInputs()">
+      </div>
 
-      <div id="names-container"></div>
+      <div class="names-wrapper">
+        <div id="names-container"></div>
+      </div>
 
       <div id="tip-section" style="display: none;">
-        <label class="tip-label">
-          <input type="checkbox" id="includeTip" onchange="toggleTipOptions()"> Include Tip?
-        </label>
+        <div class="divider"></div>
+        <div class="tip-header">
+          <label style="margin:0; color:white;">Include Tip?</label>
+          <label class="switch">
+            <input type="checkbox" id="includeTip" onchange="toggleTipOptions()">
+            <span class="slider round"></span>
+          </label>
+        </div>
 
         <div id="tip-options" style="display: none;">
-          <label>Tip Amount ($):</label>
-          <input type="number" id="tipAmount" placeholder="Enter tip amount">
+          <div class="tip-presets">
+            <button onclick="setTipPercent(0.05)" class="preset-btn">5%</button>
+            <button onclick="setTipPercent(0.10)" class="preset-btn">10%</button>
+            <button onclick="setTipPercent(0.15)" class="preset-btn">15%</button>
+          </div>
+          <input type="number" id="tipAmount" placeholder="Or enter custom tip (GH₵)">
 
-          <label>Who is paying the tip?</label>
+          <label style="margin-top:15px;">Who is paying the tip?</label>
           <div id="whoPaysTip" class="tip-payers-container"></div>
         </div>
       </div>
 
       <div class="buttons">
-        <button onclick="splitBill()">Split Bill</button>
-        <button onclick="clearFields()" class="clear-btn">Clear</button>
+        <button onclick="splitBill()" class="split-btn">CALCULATE SPLIT</button>
+        <button onclick="clearFields()" class="clear-btn">RESET</button>
       </div>
+    </div>
 
-      <div id="result"></div>
+    <div id="result-card" class="container result-card" style="display: none;">
+      <h3 style="color:#f9c400; text-align:center; margin-bottom:15px;">Bill Breakdown</h3>
+      <div id="result-list"></div>
+      <button onclick="shareToWhatsApp()" class="whatsapp-btn">
+        Share via WhatsApp
+      </button>
     </div>
 
     <footer>
@@ -53,7 +76,6 @@
       <span class="author">Developed by MR. WETTA</span>
     </footer>
   </div>
-
   <script src="Myfirst.js"></script>
 </body>
 
