@@ -40,33 +40,37 @@ function toggleTipOptions() {
 
   if (includeTip) {
     const people = Number(document.getElementById("people").value);
+
+    // Add a header
+    const header = document.createElement("p");
+    header.style.fontSize = "0.85rem";
+    header.style.color = "#aaa";
+    header.style.marginBottom = "10px";
+    header.innerText = "Enter how much tip each person contributes:";
+    whoPaysTip.appendChild(header);
+
     for (let i = 1; i <= people; i++) {
       const nameInput = document.getElementById("person" + i);
       const name = nameInput?.value.trim() || "Person " + i;
 
       const div = document.createElement("div");
-      div.className = "tip-payer";
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.id = "tipPayer" + i;
-      checkbox.value = name;
+      div.className = "tip-contribution-row";
 
       const label = document.createElement("label");
-      label.htmlFor = checkbox.id;
       label.textContent = name;
 
-      div.appendChild(checkbox);
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = "tipShare" + i; // Unique ID for their tip contribution
+      input.className = "tip-contribution-input";
+      input.placeholder = "0";
+      input.value = 0; // Default to 0
+
       div.appendChild(label);
+      div.appendChild(input);
       whoPaysTip.appendChild(div);
     }
   }
-}
-
-function setTipPercent(percent) {
-  const bill = parseFloat(document.getElementById("bill").value);
-  if (!bill) return Swal.fire("Oops", "Enter bill amount first", "warning");
-  document.getElementById("tipAmount").value = (bill * percent).toFixed(2);
 }
 
 function splitBill() {
@@ -74,72 +78,81 @@ function splitBill() {
   const people = Number(document.getElementById("people").value);
   const includeTip = document.getElementById("includeTip").checked;
 
-  if (!bill || bill <= 0) return Swal.fire("Error", "Please enter a valid bill amount.", "error");
-  if (!people || people < 2) return Swal.fire("Error", "Need at least 2 people.", "error");
+  // 1. Basic Validation
+  if (!bill || bill <= 0) return Swal.fire("ERROR", "Please enter a valid bill amount.", "error");
+  if (!people || people < 2) return Swal.fire("ERROR", "Need at least 2 people.", "error");
 
-  let tip = 0;
-  let tipPayers = [];
+  let totalTip = 0;
+  let individualTips = []; // Array to store each person's tip
 
+  // 2. Advanced Tip Logic
   if (includeTip) {
-    tip = Number(document.getElementById("tipAmount").value) || 0;
-    const checkboxes = document.querySelectorAll("#whoPaysTip input[type='checkbox']:checked");
-    tipPayers = Array.from(checkboxes).map(cb => cb.value);
+    totalTip = Number(document.getElementById("tipAmount").value) || 0;
+    let calculatedTipSum = 0;
 
-    if (tip > 0 && tipPayers.length === 0) {
-      return Swal.fire("Warning", "Who is paying the tip? Please select someone.", "warning");
+    // Loop through to get everyone's specific tip contribution
+    for (let i = 1; i <= people; i++) {
+      const contribution = Number(document.getElementById("tipShare" + i).value) || 0;
+      individualTips[i] = contribution; // Store it
+      calculatedTipSum += contribution;
+    }
+
+    // VALIDATION: Does the sum of contributions equal the total tip?
+    // Allow a small margin of error (0.1) for decimals
+    if (Math.abs(calculatedTipSum - totalTip) > 0.1) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Tip Mismatch",
+        text: `Total Tip is ${totalTip}, but contributions add up to ${calculatedTipSum}. Please adjust.`,
+        confirmButtonColor: "#f9c400"
+      });
     }
   }
 
-  const eachBill = bill / people;
-  const tipShare = tipPayers.length > 0 ? tip / tipPayers.length : 0;
+  const baseBillShare = bill / people;
 
-  // --- NEW LOGIC: BUILD HTML STRING FOR POPUP ---
-  let resultHTML = '<div style="text-align: left; font-size: 0.95rem;">';
-  let shareText = `*Afrikiko Bill Split* 🧾%0A`; // %0A is newline for WhatsApp
+  // 3. Build Result HTML
+  let resultHTML = '<div style="text-align: left; margin-top: 10px;">';
+  let shareText = `*Afrikiko Bill Split* 🧾%0A`;
 
   for (let i = 1; i <= people; i++) {
     const nameInput = document.getElementById("person" + i);
     const name = nameInput?.value.trim() || "Person " + i;
 
-    const totalPay = tipPayers.includes(name) ? eachBill + tipShare : eachBill;
+    // LOGIC: Base Share + Their Specific Tip Contribution
+    // If tips are off, individualTips[i] will be undefined, so we use || 0
+    const addedTip = individualTips[i] || 0;
+    const totalPay = baseBillShare + addedTip;
 
-    // Add row to the Popup HTML
     resultHTML += `
-      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.2);">
-        <span style="color:#ccc;">${name}</span>
-        <strong style="color:#f9c400;">GH₵ ${totalPay.toFixed(2)}</strong>
+      <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; flex-direction:column;">
+          <span style="color:#ddd;">${name}</span>
+          ${addedTip > 0 ? `<small style="color:#888; font-size:0.8em;">(Bill: ${baseBillShare.toFixed(2)} + Tip: ${addedTip})</small>` : ''}
+        </div>
+        <strong style="color:#f9c400; font-size:1.1em;">GH₵ ${totalPay.toFixed(2)}</strong>
       </div>`;
 
-    // Add line to the WhatsApp Message
     shareText += `${name}: GH₵ ${totalPay.toFixed(2)}%0A`;
   }
   resultHTML += '</div>';
 
-  // --- FIRE THE CUSTOM POPUP ---
+  // 4. Show Popup
   Swal.fire({
-    title: 'Bill Breakdown',
+    icon: 'success',
+    title: 'BILL BREAKDOWN',
     html: resultHTML,
     background: '#1a1a1a',
-    color: '#fff',
-    showDenyButton: true, // This acts as our WhatsApp button
-    confirmButtonText: 'Close',
-    denyButtonText: 'Share on WhatsApp',
-    denyButtonColor: '#25D366', // WhatsApp Green
-    confirmButtonColor: '#444', // Dark Grey for Close
-    customClass: {
-      popup: 'animate__animated animate__fadeInUp' // Slide up animation
-    }
+    color: '#ffffff',
+    showDenyButton: true,
+    confirmButtonText: 'OK',
+    denyButtonText: 'Share WhatsApp',
+    confirmButtonColor: '#f9c400',
+    denyButtonColor: '#25D366',
+    customClass: { popup: 'animate__animated animate__fadeInDown' }
   }).then((result) => {
-    if (result.isDenied) {
-      // If they clicked the Green "Share" button
-      shareToWhatsApp(shareText);
-    }
+    if (result.isDenied) window.open(`https://wa.me/?text=${shareText}`, '_blank');
   });
-}
-
-// Updated to accept text directly from the function above
-function shareToWhatsApp(text) {
-  if (text) window.open(`https://wa.me/?text=${text}`, '_blank');
 }
 
 function clearFields() {

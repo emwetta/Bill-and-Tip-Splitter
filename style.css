@@ -384,3 +384,30 @@ div:where(.swal2-container) button.swal2-confirm {
   background: rgba(0, 0, 0, 0.8) !important;
   backdrop-filter: blur(5px);
 }
+
+/* Add this to your CSS section */
+.tip-contribution-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.tip-contribution-row label {
+  margin: 0;
+  flex: 1;
+  color: #ddd;
+}
+
+.tip-contribution-input {
+  width: 100px !important;
+  /* Force width */
+  padding: 8px !important;
+  background: #333 !important;
+  color: #f9c400 !important;
+  border: 1px solid #f9c400 !important;
+  text-align: right;
+}
