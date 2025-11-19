@@ -9,6 +9,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/image.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Equal Pay">
+
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="mobile-web-app-capable" content="yes">
 </head>
 
 <body>
@@ -20,14 +27,16 @@
     </div>
 
     <div class="container">
-      <div class="input-group">
-        <label>Total Bill (GH₵)</label>
-        <input type="number" id="bill" placeholder="0.00">
-      </div>
+      <div class="row-group">
+        <div class="input-group">
+          <label>Total Bill (GH₵)</label>
+          <input type="number" id="bill" placeholder="0.00">
+        </div>
 
-      <div class="input-group">
-        <label>Number of People</label>
-        <input type="number" id="people" placeholder="How many people?" oninput="createNameInputs()">
+        <div class="input-group">
+          <label>No. of People</label>
+          <input type="number" id="people" placeholder="0" oninput="createNameInputs()">
+        </div>
       </div>
 
       <div class="names-wrapper">
@@ -44,29 +53,46 @@
           </label>
         </div>
 
-        <div id="tip-options" style="display: none;">
+        <div id="tip-options" style="display: none; margin-top: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <label style="color: #aaa; font-size: 0.9rem; margin: 0; white-space: nowrap;">Total Tip (GH₵):</label>
+            <input type="number" id="tipAmount" placeholder="0.00" style="margin: 0;">
+          </div>
 
-          <input type="number" id="tipAmount" placeholder="Or enter custom tip (GH₵)">
-
-          <label style="margin-top:15px;">Who is paying the tip?</label>
+          <label style="margin-top:5px; font-size:0.85rem; color:#f9c400;">Who is paying the tip?</label>
           <div id="whoPaysTip" class="tip-payers-container"></div>
         </div>
       </div>
 
-      <div class="buttons">
-        <button onclick="splitBill()" class="split-btn">CALCULATE SPLIT</button>
-        <button onclick="clearFields()" class="clear-btn">RESET</button>
+      <div class="input-group"
+        style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+        <label style="color:#f9c400;">Payment Method</label>
+
+        <select id="paymentMethod" onchange="togglePaymentInput()">
+          <option value="cash">Cash 💵</option>
+          <option value="momo">Mobile Money 📲</option>
+        </select>
+
+        <div id="momoInputDiv" style="display: none; margin-top: 10px;">
+          <input type="text" id="momoName" placeholder="Collector's Name (e.g. Kofi)"
+            style="border: 1px solid #f9c400; margin-bottom: 8px;">
+
+          <input type="tel" id="momoNumber" placeholder="024xxxxxxx" maxlength="10" style="border: 1px solid #f9c400;">
+        </div>
+
+        <div class="buttons">
+          <button onclick="splitBill()" class="split-btn">CALCULATE SPLIT</button>
+          <button onclick="clearFields()" class="clear-btn">RESET</button>
+        </div>
       </div>
+
+      <footer>
+        Thank you for using Equal Pay<br>
+        <span class="author">Developed by MR. WETTA</span>
+      </footer>
     </div>
 
-
-
-    <footer>
-      Thank you for using Equal Pay<br>
-      <span class="author">Developed by MR. WETTA</span>
-    </footer>
-  </div>
-  <script src="Myfirst.js"></script>
+    <script src="Myfirst.js"></script>
 </body>
 
 </html>

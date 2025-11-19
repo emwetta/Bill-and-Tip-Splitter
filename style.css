@@ -1,4 +1,3 @@
-/* --- RESET & BASICS --- */
 * {
   margin: 0;
   padding: 0;
@@ -15,15 +14,8 @@ body {
   width: 100%;
   font-family: "Poppins", sans-serif;
   background-color: #1a1a1a;
-
-  /* --- STEP 1: REMOVE THE BACKGROUND IMAGE LINE FROM HERE --- */
-  /* background: ... (delete this line) ... */
-
-  /* --- STEP 2: ADD THESE TWO LINES --- */
   position: relative;
   z-index: 1;
-  /* ----------------------------------- */
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,21 +24,16 @@ body {
   color: white;
 }
 
-/* --- STEP 3: ADD THIS NEW SECTION RIGHT BELOW BODY --- */
+
 body::before {
   content: "";
   position: fixed;
-  /* This is the magic word that works on iPhone */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-
-  /* Put your image here. Note: I removed the word 'fixed' from the end */
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
-
   z-index: -1;
-  /* This pushes the image behind your buttons */
 }
 
 @media (max-height: 750px) {
@@ -65,23 +52,22 @@ body::before {
   align-items: center;
 }
 
-/* --- HEADER & LOGO --- */
 .header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .logo {
-  width: 100px;
+  width: 70px;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #f9c400;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -89,13 +75,13 @@ h1 {
   margin: 0;
 }
 
-/* --- GLASS CARD CONTAINER --- */
+
 .container {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 25px;
+  padding: 15px;
   border-radius: 20px;
   width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -103,7 +89,7 @@ h1 {
   animation: fadeIn 0.8s;
 }
 
-/* --- INPUTS --- */
+
 .input-group {
   margin-bottom: 15px;
 }
@@ -116,30 +102,98 @@ label {
   font-weight: 600;
 }
 
+
 input[type="number"],
-input[type="text"] {
+input[type="text"],
+input[type="tel"],
+select {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: none;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.6) !important;
+
+  border: 1px solid #f9c400;
+  color: #ffffff !important;
+
   font-size: 1rem;
   outline: none;
+  transition: all 0.3s ease;
+  caret-color: #f9c400;
+
 }
 
-input:focus {
-  box-shadow: 0 0 0 3px rgba(249, 196, 0, 0.5);
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #222 inset !important;
+  /* Matches dark theme */
+  -webkit-text-fill-color: #ffffff !important;
+  /* Forces text to stay white */
+  border: 1px solid #f9c400 !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-.names-wrapper {
-  max-height: 200px;
-  overflow-y: auto;
+::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 10px rgba(249, 196, 0, 0.4);
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* --- ROW GROUP (SIDE BY SIDE) --- */
+.row-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
   margin-bottom: 10px;
-  padding-right: 5px;
+}
+
+.row-group .input-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* --- LIST CONTAINERS --- */
+.names-wrapper,
+.tip-payers-container {
+  max-height: 120px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Scrollbar Styling */
+.names-wrapper::-webkit-scrollbar,
+.tip-payers-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.names-wrapper::-webkit-scrollbar-track,
+.tip-payers-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.names-wrapper::-webkit-scrollbar-thumb,
+.tip-payers-container::-webkit-scrollbar-thumb {
+  background: #f9c400;
+  border-radius: 10px;
 }
 
 .name-input {
-  margin-bottom: 8px !important;
+  margin-bottom: 0 !important;
 }
 
 /* --- TIP SECTION --- */
@@ -201,54 +255,30 @@ input:checked+.slider:before {
   transform: translateX(22px);
 }
 
-.tip-presets {
+/* Tip Input Row */
+.tip-contribution-row {
   display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.preset-btn {
-  flex: 1;
-  background: transparent;
-  border: 1px solid #f9c400;
-  color: #f9c400;
-  padding: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 10px;
   border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
 }
 
-.preset-btn:hover {
-  background: #f9c400;
-  color: black;
+.tip-contribution-row label {
+  margin: 0;
+  flex: 1;
+  color: #ddd;
 }
 
-.tip-payers-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.tip-payer label {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  border: 1px solid transparent;
-  transition: 0.3s;
-}
-
-.tip-payer input[type="checkbox"] {
-  display: none;
-}
-
-.tip-payer input:checked+label {
-  background: #f9c400;
-  color: black;
-  border-color: #f9c400;
+.tip-contribution-input {
+  width: 100px !important;
+  padding: 8px !important;
+  background: #333 !important;
+  color: #f9c400 !important;
+  border: 1px solid #f9c400 !important;
+  text-align: right;
 }
 
 /* --- BUTTONS --- */
@@ -285,7 +315,6 @@ button:active {
   border: 1px solid #f9c400;
 }
 
-/* --- FOOTER --- */
 footer {
   margin-top: 30px;
   text-align: center;
@@ -298,46 +327,14 @@ footer {
   font-weight: bold;
 }
 
-/* --- RESULT CARD --- */
-.result-card {
-  background: #000;
-  border: 2px solid #f9c400;
-  animation: fadeInUp 0.5s;
-}
-
-.result-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #333;
-  font-size: 0.95rem;
-}
-
-.result-item span {
-  color: #ccc;
-}
-
-.result-item strong {
-  color: #f9c400;
-  font-size: 1.1rem;
-}
-
-.whatsapp-btn {
-  background: #25D366;
+/* --- DROPDOWN OPTIONS --- */
+select option {
+  background-color: #1a1a1a;
   color: white;
-  width: 100%;
-  margin-top: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  padding: 12px;
 }
 
-/* ========================================= */
-/* --- SWEETALERT CUSTOMIZATION (POPUPS) --- */
-/* ========================================= */
-
-/* The Popup Box */
+/* --- SWEETALERT CUSTOMIZATION --- */
 div:where(.swal2-container) div:where(.swal2-popup) {
   background: #1a1a1a !important;
   border: 2px solid #f9c400 !important;
@@ -345,20 +342,17 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   padding: 2rem !important;
 }
 
-/* The Title Text */
 div:where(.swal2-container) .swal2-title {
   color: #f9c400 !important;
   font-family: "Poppins", sans-serif !important;
   text-transform: uppercase;
 }
 
-/* The Content Text */
 div:where(.swal2-container) .swal2-html-container {
   color: #ccc !important;
   font-family: "Poppins", sans-serif !important;
 }
 
-/* The "OK" Button */
 div:where(.swal2-container) button.swal2-confirm {
   background-color: #f9c400 !important;
   color: black !important;
@@ -368,7 +362,6 @@ div:where(.swal2-container) button.swal2-confirm {
   outline: none !important;
 }
 
-/* Icons Colors */
 .swal2-icon.swal2-warning {
   border-color: #f9c400 !important;
   color: #f9c400 !important;
@@ -379,35 +372,7 @@ div:where(.swal2-container) button.swal2-confirm {
   color: #ff4444 !important;
 }
 
-/* Backdrop Overlay */
 .swal2-backdrop-show {
   background: rgba(0, 0, 0, 0.8) !important;
   backdrop-filter: blur(5px);
-}
-
-/* Add this to your CSS section */
-.tip-contribution-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-.tip-contribution-row label {
-  margin: 0;
-  flex: 1;
-  color: #ddd;
-}
-
-.tip-contribution-input {
-  width: 100px !important;
-  /* Force width */
-  padding: 8px !important;
-  background: #333 !important;
-  color: #f9c400 !important;
-  border: 1px solid #f9c400 !important;
-  text-align: right;
 }
