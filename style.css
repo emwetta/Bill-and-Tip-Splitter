@@ -1,3 +1,6 @@
+/* --- PASTE THIS OVER YOUR EXISTING CSS --- */
+
+/* --- RESET & BASICS --- */
 * {
   margin: 0;
   padding: 0;
@@ -23,7 +26,6 @@ body {
   padding: 20px;
   color: white;
 }
-
 
 body::before {
   content: "";
@@ -75,7 +77,7 @@ h1 {
   margin: 0;
 }
 
-
+/* --- CONTAINER --- */
 .container {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px);
@@ -89,7 +91,33 @@ h1 {
   animation: fadeIn 0.8s;
 }
 
+/* --- NEW: TOGGLE BUTTONS (Equal vs Custom) --- */
+.toggle-container {
+  display: flex;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid #444;
+}
 
+.toggle-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.toggle-btn.active {
+  background: #f9c400;
+  color: black;
+  font-weight: bold;
+}
+
+/* --- INPUTS --- */
 .input-group {
   margin-bottom: 15px;
 }
@@ -102,7 +130,6 @@ label {
   font-weight: 600;
 }
 
-
 input[type="number"],
 input[type="text"],
 input[type="tel"],
@@ -111,28 +138,22 @@ select {
   padding: 12px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.6) !important;
-
   border: 1px solid #f9c400;
-  color: #ffffff !important;
-
+  color: #fff !important;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease;
   caret-color: #f9c400;
-
 }
 
-
+/* Autofill Fix */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #222 inset !important;
-  /* Matches dark theme */
   -webkit-text-fill-color: #ffffff !important;
-  /* Forces text to stay white */
   border: 1px solid #f9c400 !important;
-  transition: background-color 5000s ease-in-out 0s;
 }
 
 ::placeholder {
@@ -146,7 +167,7 @@ select:focus {
   background: rgba(0, 0, 0, 0.8) !important;
 }
 
-/* --- ROW GROUP (SIDE BY SIDE) --- */
+/* --- ROW GROUP --- */
 .row-group {
   display: flex;
   gap: 10px;
@@ -159,10 +180,10 @@ select:focus {
   margin-bottom: 0;
 }
 
-/* --- LIST CONTAINERS --- */
+/* --- SCROLLABLE LISTS --- */
 .names-wrapper,
 .tip-payers-container {
-  max-height: 120px;
+  max-height: 140px;
   overflow-y: auto;
   margin-bottom: 15px;
   padding: 10px;
@@ -174,7 +195,20 @@ select:focus {
   gap: 8px;
 }
 
-/* Scrollbar Styling */
+/* New: Individual Name Row (For Custom Split) */
+.name-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.name-row input[type="number"] {
+  width: 100px !important;
+  /* Width for the individual bill amount */
+  text-align: right;
+}
+
+/* Scrollbar */
 .names-wrapper::-webkit-scrollbar,
 .tip-payers-container::-webkit-scrollbar {
   width: 6px;
@@ -190,10 +224,6 @@ select:focus {
 .tip-payers-container::-webkit-scrollbar-thumb {
   background: #f9c400;
   border-radius: 10px;
-}
-
-.name-input {
-  margin-bottom: 0 !important;
 }
 
 /* --- TIP SECTION --- */
@@ -255,7 +285,6 @@ input:checked+.slider:before {
   transform: translateX(22px);
 }
 
-/* Tip Input Row */
 .tip-contribution-row {
   display: flex;
   align-items: center;
@@ -327,14 +356,13 @@ footer {
   font-weight: bold;
 }
 
-/* --- DROPDOWN OPTIONS --- */
 select option {
   background-color: #1a1a1a;
   color: white;
   padding: 12px;
 }
 
-/* --- SWEETALERT CUSTOMIZATION --- */
+/* --- SWEETALERT --- */
 div:where(.swal2-container) div:where(.swal2-popup) {
   background: #1a1a1a !important;
   border: 2px solid #f9c400 !important;
@@ -358,8 +386,13 @@ div:where(.swal2-container) button.swal2-confirm {
   color: black !important;
   font-weight: bold !important;
   border-radius: 10px !important;
-  box-shadow: none !important;
-  outline: none !important;
+}
+
+div:where(.swal2-container) button.swal2-cancel {
+  background-color: #444 !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
 }
 
 .swal2-icon.swal2-warning {
